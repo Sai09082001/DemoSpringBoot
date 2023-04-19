@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>Login</h1>
+ <!--tu them root url khi doi duong dan  -->
+<form th:action="@{/login}" method="post">
+   <div>
+     <label>UserName : </label>
+       <input type="text" name ="username"/>
+   </div>
+     <div>
+       <label>Password : </label>
+       <input type="password" name="password"/>
+     </div>
+      <div>
+       <button type="submit">Login</button>
+      </div>
+   </form>
+</body>
+</html>

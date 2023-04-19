@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<form th:action="@{/inventory/new}" method="post">
+   <div>
+     <label>Id : </label>
+       <input type="number" name ="id"/>
+   </div>
+      <div>
+       <label>Name : </label>
+       <input type="text" name="name"/>
+     </div>
+      <div>
+       <button type="submit">Create</button>
+      </div>
+   </form>
+</body>
+</html>
