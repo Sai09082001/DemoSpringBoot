@@ -17,7 +17,12 @@ import com.example.demo.service.InventoryService;
 public class InventoryController {
 	@Autowired  // DI Dependence Inject
 	InventoryService inventoryService;
-
+	
+	@GetMapping("/inventory/intro") 
+	public String intro() {
+		return "index.html";
+	}
+	
 	@GetMapping("/inventory/new") 
 	public String newInventory() {
 		return "new-inventory.html";
