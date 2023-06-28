@@ -34,7 +34,7 @@ public class UserDTO {
 	private Date birthdate;
 	@JsonIgnore
 	private MultipartFile file;
-	private List<OrdersDTO> orders;
+	//private List<OrdersDTO> orders;
 	//private List<DeliveryDTO> deliveries;
 }
 

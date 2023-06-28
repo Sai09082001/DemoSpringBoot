@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -22,30 +23,40 @@ import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 
 @Data
 @Table(name = "orders")
 @Entity
-public class Orders {
+public class Orders extends TimeAuditable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	private int id;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "orders", cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<OrderItems> orderItems;
 	
 	private double price;
 	private String comment;
 	
-	@CreatedDate
-	@Column(updatable = false)
-	private Date createdAt;
-
+	private String shopName;
+	
+	private String address;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	 @ManyToOne
+	 @JoinColumn(name = "shipper_id")
+	 private User shipper;
+	
+	@ManyToOne
+	@JoinColumn(name = "shop_id")
+	private Shop shop;
 	
 	@ElementCollection    // ap dung voi bang chi voi 2 cot , 1 cot FK
 	@CollectionTable(name = "status",joinColumns = @JoinColumn(name = "delivery_id"))

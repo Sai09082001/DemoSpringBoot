@@ -33,4 +33,7 @@ public class Shop {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	@OneToMany(mappedBy = "shop")
+    private List<Orders> orders;
 }
