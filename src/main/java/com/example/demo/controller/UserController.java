@@ -46,7 +46,7 @@ public class UserController {
 	}
 
 	@PostMapping("/avatar")
-	public ResponseDTO<Void> avatar(@ModelAttribute @Valid UserDTO userDTO) throws IllegalStateException,IOException {
+	public ResponseDTO<Void> avatar(@ModelAttribute UserDTO userDTO) throws IllegalStateException,IOException {
 		// update avatar
 		if(!userDTO.getFile().isEmpty()) {
 			//ten file upload
@@ -107,10 +107,8 @@ public class UserController {
 	}
 	
 	@PostMapping("/edit")
-	public String edit(@ModelAttribute("user") @Valid UserDTO userDTO, BindingResult bindingResult) throws Exception {
-		if(bindingResult.hasErrors()) {
-			return "edit-user.html";
-		}
+	public ResponseDTO<Void> edit(@ModelAttribute("user") @Valid UserDTO userDTO) throws Exception {
+	
 		if(!userDTO.getFile().isEmpty()) {
 			//ten file upload
 			String filename = userDTO.getFile().getOriginalFilename();
@@ -123,6 +121,6 @@ public class UserController {
 			userDTO.setAvatarUrl(filename);
 		}
 		userService.update(userDTO);
-		return "redirect:/user/list";
+		return ResponseDTO.<Void>builder().status(200).msg("ok").build();
 	}
 }

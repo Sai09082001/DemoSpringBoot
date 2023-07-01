@@ -51,6 +51,12 @@ public class OrdersController {
 		return ResponseDTO.<List<OrdersDTO>>builder().status(200).data(ordersDTO).build();
 	}
 	
+	@GetMapping("/update")
+	public ResponseDTO<Void> updateOrder(@RequestBody @Valid OrdersDTO ordersDTO ) {
+		ordersService.update(ordersDTO);
+		return ResponseDTO.<Void>builder().status(200).msg("update").build();
+	}
+	
 	@GetMapping("/ship") // 10
 	public ResponseDTO<List<OrdersDTO>> searchByShipper(@RequestParam("id") int id) {
 		List<OrdersDTO> ordersDTO = ordersService.findByShipperId(id);
