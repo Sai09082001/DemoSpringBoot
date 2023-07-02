@@ -57,11 +57,13 @@ class ProductsServiceImpl implements ProductsService {
 	}
 
 	@Override
+	@Transactional
 	public void update(ProductsDTO productsDTO) {
 		// check
 		Products products = productsRepo.findById(productsDTO.getId()).orElseThrow(NoResultException::new);
-		
+		Categories categories = new ModelMapper().map(productsDTO.getCategory(), Categories.class);
 		products.setName(productsDTO.getName());
+		products.setCategories(categories);
 			// save entity
 		productsRepo.save(products);
 	

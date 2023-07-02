@@ -42,6 +42,7 @@ public class ProductsController {
 		return ResponseDTO.<Void>builder().status(200).msg("ok").build();
 	}
 	
+	
 	@GetMapping("/{id}") // 10
 	public ResponseDTO<ProductsDTO> get(@PathVariable("id") int id) {
 		ProductsDTO productsDTO = productsService.getById(id);
