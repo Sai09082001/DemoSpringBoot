@@ -38,6 +38,9 @@ class CategoriesServiceImpl implements CategoriesService {
 	@Autowired
 	private CategoriesRepo categoriesRepo;
 	
+	@Autowired
+	private ProductsRepo productsRepo;
+	
 	@Override
 	@Transactional
 	public void create(CategoriesDTO categoriesDTO) {
@@ -50,6 +53,19 @@ class CategoriesServiceImpl implements CategoriesService {
 		// check
 		Categories categories = categoriesRepo.findById(categoriesDTO.getId()).orElseThrow(NoResultException::new);
 		
+		for (ProductsDTO productDTO : categoriesDTO.getProducts()) {
+	        // Kiểm tra và lấy sản phẩm hiện có từ ID
+	        Products product = productsRepo.findById(productDTO.getId()).orElseThrow(NoResultException::new);
+
+	        // Cập nhật thông tin của sản phẩm
+	        product.setName(productDTO.getName());
+	        product.setDescription(productDTO.getDescription());
+	        // Cập nhật các thuộc tính khác của sản phẩm
+
+	        product.setCategories(categories);
+	        categories.getProducts().add(product);
+	    }
+
 		categories.setName(categoriesDTO.getName());
 			// save entity
 		categoriesRepo.save(categories);
