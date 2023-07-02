@@ -16,5 +16,5 @@ public class ProductsDTO {
 	
 	private int quantity;
 
-	//private CategoriesDTO categories;
+	private CategoriesDTO category;
 }

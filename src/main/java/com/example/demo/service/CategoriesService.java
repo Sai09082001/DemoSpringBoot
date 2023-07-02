@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.CategoriesDTO;
+import com.example.demo.dto.ProductsDTO;
 import com.example.demo.entity.Categories;
+import com.example.demo.entity.Products;
 import com.example.demo.repository.CategoriesRepo;
+import com.example.demo.repository.ProductsRepo;
 
 public interface CategoriesService {
 
@@ -33,8 +37,7 @@ class CategoriesServiceImpl implements CategoriesService {
 
 	@Autowired
 	private CategoriesRepo categoriesRepo;
-
-
+	
 	@Override
 	@Transactional
 	public void create(CategoriesDTO categoriesDTO) {

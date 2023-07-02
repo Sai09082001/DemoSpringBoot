@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.ProductsDTO;
+import com.example.demo.entity.Categories;
+
 import com.example.demo.entity.Products;
+import com.example.demo.repository.CategoriesRepo;
 import com.example.demo.repository.ProductsRepo;
 
 
@@ -35,13 +38,22 @@ class ProductsServiceImpl implements ProductsService {
 
 	@Autowired
 	private ProductsRepo productsRepo;
+	
+	@Autowired
+	private CategoriesRepo categoriesRepo;
 
-
-	@Override
 	@Transactional
-	public void create(ProductsDTO productsDTO) {
-		Products products = new ModelMapper().map(productsDTO, Products.class);
-		productsRepo.save(products);
+	public void create(ProductsDTO productDTO) {
+		Categories category = 
+				categoriesRepo.findById(productDTO.getCategory().getId()).orElseThrow(NoResultException::new);// java8 lambda
+		
+		Products product = new ModelMapper().map(productDTO, Products.class);
+		product.setCategories(category);
+		
+		productsRepo.save(product);
+		
+		//tra ve id sau khi tao
+		productDTO.setId(product.getId());
 	}
 
 	@Override
