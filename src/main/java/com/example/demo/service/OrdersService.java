@@ -23,6 +23,7 @@ import com.example.demo.dto.SearchDTO;
 
 import com.example.demo.entity.OrderItems;
 import com.example.demo.entity.Orders;
+import com.example.demo.entity.Products;
 import com.example.demo.entity.User;
 import com.example.demo.repository.OrdersRepo;
 import com.example.demo.repository.ProductsRepo;
@@ -33,6 +34,8 @@ public interface OrdersService {
 	void create(OrdersDTO ordersDTO);
 
 	void update(OrdersDTO ordersDTO);
+	
+	void updateQuantity(OrdersDTO ordersDTO);
 	
 	List<OrdersDTO> getAll();
 
@@ -88,15 +91,15 @@ class OrdersServiceImpl implements OrdersService {
 		ordersRepo.save(orders);
 	}
 
-	@Override
+	@Transactional
 	public void update(OrdersDTO ordersDTO) {
 		// check
-		Orders orders = ordersRepo.findById(ordersDTO.getId()).orElseThrow(NoResultException::new);
-		
+		Orders currentOrders = ordersRepo.findById(ordersDTO.getId()).orElseThrow(NoResultException::new);
+		currentOrders.setStates(ordersDTO.getStates());
+		User shipper = new ModelMapper().map(ordersDTO.getShipper(), User.class);
+		currentOrders.setShipper(shipper);
 			// save entity
-		ordersRepo.save(orders);
-	
-
+		ordersRepo.save(currentOrders);
 	}
 	
 	@Override
@@ -143,6 +146,25 @@ class OrdersServiceImpl implements OrdersService {
 	public List<OrdersDTO> findByShipperId(int shipperId) {
 		  List<Orders> orders = ordersRepo.findByShipperId(shipperId);
 	       return orders.stream().map(u -> convert(u)).collect(Collectors.toList());
+	}
+
+	@Override
+	public void updateQuantity(OrdersDTO ordersDTO) {
+		Orders currentOrders = ordersRepo.findById(ordersDTO.getId()).orElseThrow(NoResultException::new);
+		currentOrders.setStates(ordersDTO.getStates());
+
+		for (OrderItemsDTO orderItemsDTO : ordersDTO.getOrderItems()) {
+		    Products products = productRepo.findById(orderItemsDTO.getProduct().getId()).orElseThrow(NoResultException::new);
+		    int currentProducts = orderItemsDTO.getQuantity();
+		    int newQuantity = products.getQuantity()-currentProducts;
+		    if (newQuantity >= 0) {
+		    	products.setQuantity(newQuantity);
+		    }
+		    productRepo.save(products);
+			
+		}
+			// save entity
+		ordersRepo.save(currentOrders);
 	}
 
 //	public PageDTO<OrderStatisticDTO> statistic() {

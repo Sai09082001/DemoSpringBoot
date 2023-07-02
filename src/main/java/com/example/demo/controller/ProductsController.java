@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import com.example.demo.dto.PageDTO;
 import com.example.demo.dto.ProductsDTO;
 import com.example.demo.dto.ResponseDTO;
 import com.example.demo.dto.SearchDTO;
+import com.example.demo.dto.ShopDTO;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.Products;
 import com.example.demo.service.ProductsService;
@@ -38,6 +40,12 @@ public class ProductsController {
 		productsService.create(productsDTO);
 		//return "redirect:/user/list";// GET
 		return ResponseDTO.<Void>builder().status(200).msg("ok").build();
+	}
+	
+	@GetMapping("/{id}") // 10
+	public ResponseDTO<ProductsDTO> get(@PathVariable("id") int id) {
+		ProductsDTO productsDTO = productsService.getById(id);
+		return ResponseDTO.<ProductsDTO>builder().status(200).data(productsDTO).build();
 	}
 	
 	@DeleteMapping("/delete")

@@ -21,7 +21,7 @@ public class OrdersDTO {
 	private Date createdAt;
 	private String address;
 	private String comment;
-	private List<String> states;
+	private String states;
 	private UserDTO user;
 	private UserDTO shipper;
 	//private ShopDTO shop;

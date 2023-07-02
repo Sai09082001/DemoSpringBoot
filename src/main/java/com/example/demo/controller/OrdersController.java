@@ -51,7 +51,7 @@ public class OrdersController {
 		return ResponseDTO.<List<OrdersDTO>>builder().status(200).data(ordersDTO).build();
 	}
 	
-	@GetMapping("/update")
+	@PostMapping("/update")
 	public ResponseDTO<Void> updateOrder(@RequestBody @Valid OrdersDTO ordersDTO ) {
 		ordersService.update(ordersDTO);
 		return ResponseDTO.<Void>builder().status(200).msg("update").build();

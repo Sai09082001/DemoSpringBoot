@@ -58,8 +58,11 @@ public class Orders extends TimeAuditable{
 	@JoinColumn(name = "shop_id")
 	private Shop shop;
 	
-	@ElementCollection    // ap dung voi bang chi voi 2 cot , 1 cot FK
-	@CollectionTable(name = "status",joinColumns = @JoinColumn(name = "delivery_id"))
-	@Column(name="state")
-	private List<String> states;
+	@JoinColumn(name = "states")
+	private String states;
+	
+//	@ElementCollection    // ap dung voi bang chi voi 2 cot , 1 cot FK
+//	@CollectionTable(name = "status",joinColumns = @JoinColumn(name = "delivery_id"))
+//	@Column(name="state")
+//	private List<String> states;
 }
