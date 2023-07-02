@@ -56,7 +56,7 @@ public class ProductsController {
 	}
 	
 	@PostMapping("/edit")
-	public ResponseDTO<Void> edit(@RequestBody @Valid ProductsDTO productsDTO) throws Exception {
+	public ResponseDTO<Void> edit(@RequestBody ProductsDTO productsDTO) throws Exception {
 	
 		productsService.update(productsDTO);
 		return ResponseDTO.<Void>builder().status(200).msg("ok").build();

@@ -37,7 +37,7 @@ public class Products {
 	
 	private String imageUrl;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "categories_id")
 	private Categories categories;
 	

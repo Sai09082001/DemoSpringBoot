@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.ShopDTO;
+import com.example.demo.entity.Categories;
 import com.example.demo.entity.Shop;
 import com.example.demo.entity.User;
 import com.example.demo.repository.ShopRepo;
@@ -47,12 +50,16 @@ class ShopServiceImpl implements ShopService {
 	public void update(ShopDTO shopDTO) {
 		// check
 		Shop currentShop = shopRepo.findById(shopDTO.getId()).orElseThrow(NoResultException::new);
-		
+		List<Categories> listCategories = new ArrayList<Categories>();
+		for (int i = 0; i < shopDTO.getCategories().size(); i++) {
+			Categories categories = new ModelMapper().map(shopDTO.getCategories().get(i), Categories.class);
+			listCategories.add(categories);
+		}
 		if (currentShop != null) {
 			currentShop.setName(shopDTO.getName());
 			currentShop.setAddress(shopDTO.getAddress());
 			currentShop.setPhone(shopDTO.getPhone());
-           
+            currentShop.setCategories(listCategories);
 			shopRepo.save(currentShop);
 		}
 

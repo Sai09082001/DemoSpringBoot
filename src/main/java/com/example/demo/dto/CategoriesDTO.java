@@ -12,7 +12,7 @@ public class CategoriesDTO {
 	private String name;
 	private String categoryUrl;
 	
-//	private Shop shop;
+	//private ShopDTO shop;
 	
 	private List<ProductsDTO> products;
 }
