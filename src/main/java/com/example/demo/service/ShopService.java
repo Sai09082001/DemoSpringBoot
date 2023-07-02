@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.ShopDTO;
 import com.example.demo.entity.Shop;
+import com.example.demo.entity.User;
 import com.example.demo.repository.ShopRepo;
 
 public interface ShopService {
@@ -45,12 +46,15 @@ class ShopServiceImpl implements ShopService {
 	@Override
 	public void update(ShopDTO shopDTO) {
 		// check
-		Shop shop = shopRepo.findById(shopDTO.getId()).orElseThrow(NoResultException::new);
+		Shop currentShop = shopRepo.findById(shopDTO.getId()).orElseThrow(NoResultException::new);
 		
-		shop.setName(shopDTO.getName());
-			// save entity
-		shopRepo.save(shop);
-	
+		if (currentShop != null) {
+			currentShop.setName(shopDTO.getName());
+			currentShop.setAddress(shopDTO.getAddress());
+			currentShop.setPhone(shopDTO.getPhone());
+           
+			shopRepo.save(currentShop);
+		}
 
 	}
 	
