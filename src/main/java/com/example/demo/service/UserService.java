@@ -51,7 +51,7 @@ public class UserService {
 			currentUser.setName(userDTO.getName());
 			currentUser.setAge(userDTO.getAge());
 			currentUser.setHomeAddress(userDTO.getHomeAddress());
-            if (userDTO != null) {
+            if (userDTO != null && userDTO.getAvatarUrl() != null) {
             	currentUser.setAvatarUrl(userDTO.getAvatarUrl());
             }
 			userRepo.save(currentUser);
