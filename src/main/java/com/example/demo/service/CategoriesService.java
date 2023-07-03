@@ -27,6 +27,8 @@ public interface CategoriesService {
 	List<CategoriesDTO> getAll();
 
 	void delete(int id);
+	
+	void deleteProduct(int idC, int idP);
 
 	CategoriesDTO getById(int id);
 
@@ -106,6 +108,17 @@ class CategoriesServiceImpl implements CategoriesService {
 //		return userDTOs;
 		// java 8
 		return categoriesList.stream().map(u -> convert(u)).collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional
+	public void deleteProduct(int idC, int idP) {
+		 Categories category = categoriesRepo.findById(idC).orElseThrow(NoResultException::new);
+
+		    Products product = productsRepo.findById(idP).orElseThrow(NoResultException::new);
+		    category.removeProduct(product);
+		    categoriesRepo.save(category);
+		
 	}
 
 }
