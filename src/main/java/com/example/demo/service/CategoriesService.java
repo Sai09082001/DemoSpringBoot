@@ -75,14 +75,6 @@ class CategoriesServiceImpl implements CategoriesService {
 	
 	@Override
 	public void delete(int id) {
-		 Categories category = categoriesRepo.findById(id).orElseThrow(NoResultException::new);
-		    
-		    // Xóa liên kết giữa sản phẩm và danh mục
-		  for (Products product : category.getProducts()) {
-		       product.setCategories(null);
-		       productsRepo.save(product);
-		  }
-		    
 		    // Xóa danh mục
 		  categoriesRepo.deleteById(id);
 	}
