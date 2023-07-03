@@ -72,6 +72,17 @@ class ProductsServiceImpl implements ProductsService {
 	
 	@Override
 	public void delete(int id) {
+		  Products product = productsRepo.findById(id).orElseThrow(NoResultException::new);
+		    Categories category = product.getCategories();
+
+		    // Xóa liên kết giữa sản phẩm và danh mục
+		    category.getProducts().remove(product);
+		    categoriesRepo.save(category);
+
+		    // Xóa tất cả các bản ghi liên quan trong bảng OrderItems
+
+		    // Xóa sản phẩm
+		    productsRepo.deleteById(id);
 		productsRepo.deleteById(id);
 	}
 

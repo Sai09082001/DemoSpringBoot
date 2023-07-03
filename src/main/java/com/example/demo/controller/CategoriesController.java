@@ -54,6 +54,12 @@ public class CategoriesController {
 		return ResponseDTO.<Void>builder().status(200).msg("ok").build();
 	}
 	
+	@DeleteMapping("/delete/product")
+	public ResponseDTO<Void> delete(@RequestParam("idC") int idC,@RequestParam("idP") int idP) {
+		categoriesService.removeProduct(idC, idP);
+		return ResponseDTO.<Void>builder().status(200).msg("delete").build();
+	}
+	
 	@DeleteMapping("/delete")
 	public ResponseDTO<Void> delete(@RequestParam("id") int id) {
 		categoriesService.delete(id);
