@@ -21,8 +21,6 @@ import com.example.demo.repository.ProductsRepo;
 public interface CategoriesService {
 
 	void create(CategoriesDTO categoriesDTO);
-	
-	void removeProduct(int idC,int idP);
 
 	void update(CategoriesDTO categoriesDTO);
 	
@@ -73,16 +71,6 @@ class CategoriesServiceImpl implements CategoriesService {
 		categoriesRepo.save(categories);
 	
 
-	}
-	
-	@Transactional
-	public void removeProduct(int categoryId, int productId) {
-	    Categories category = categoriesRepo.findById(categoryId).orElseThrow(NoResultException::new);
-
-	    Products product = productsRepo.findById(productId).orElseThrow(NoResultException::new);
-
-	    category.removeProduct(product);
-	    categoriesRepo.save(category);
 	}
 	
 	@Override
