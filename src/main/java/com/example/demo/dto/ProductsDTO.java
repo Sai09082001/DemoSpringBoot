@@ -15,5 +15,6 @@ public class ProductsDTO {
 	private String imageUrl;
 	
 	private int quantity;
-	//private CategoriesDTO categories;
+
+	private CategoriesDTO category;
 }

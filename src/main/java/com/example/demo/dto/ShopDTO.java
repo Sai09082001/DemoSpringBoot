@@ -12,5 +12,5 @@ public class ShopDTO {
     
 	private List<CategoriesDTO> categories;
    
-	private UserDTO user;
+	//private UserDTO user;
 }

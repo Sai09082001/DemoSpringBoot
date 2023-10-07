@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.entity.Shop;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
@@ -32,9 +33,9 @@ public class UserDTO {
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@JsonFormat(pattern = "dd/MM/yyyy",timezone = "Asia/Ho_Chi_Minh")
 	private Date birthdate;
-	@JsonIgnore
+	@JsonProperty(required = false)
 	private MultipartFile file;
-	private List<OrdersDTO> orders;
+	//private List<OrdersDTO> orders;
 	//private List<DeliveryDTO> deliveries;
 }
 

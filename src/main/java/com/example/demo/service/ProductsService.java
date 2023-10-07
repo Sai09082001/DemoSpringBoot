@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.ProductsDTO;
+import com.example.demo.entity.Categories;
+
 import com.example.demo.entity.Products;
+import com.example.demo.repository.CategoriesRepo;
 import com.example.demo.repository.ProductsRepo;
 
 
@@ -35,29 +38,51 @@ class ProductsServiceImpl implements ProductsService {
 
 	@Autowired
 	private ProductsRepo productsRepo;
+	
+	@Autowired
+	private CategoriesRepo categoriesRepo;
 
-
-	@Override
 	@Transactional
-	public void create(ProductsDTO productsDTO) {
-		Products products = new ModelMapper().map(productsDTO, Products.class);
-		productsRepo.save(products);
+	public void create(ProductsDTO productDTO) {
+		Categories category = 
+				categoriesRepo.findById(productDTO.getCategory().getId()).orElseThrow(NoResultException::new);// java8 lambda
+		
+		Products product = new ModelMapper().map(productDTO, Products.class);
+		product.setCategories(category);
+		
+		productsRepo.save(product);
+		
+		//tra ve id sau khi tao
+		productDTO.setId(product.getId());
 	}
 
 	@Override
+	@Transactional
 	public void update(ProductsDTO productsDTO) {
 		// check
 		Products products = productsRepo.findById(productsDTO.getId()).orElseThrow(NoResultException::new);
-		
+		//Categories categories = new ModelMapper().map(productsDTO.getCategory(), Categories.class);
 		products.setName(productsDTO.getName());
+		//products.setCategories(categories);
 			// save entity
 		productsRepo.save(products);
-	
+	    
 
 	}
 	
 	@Override
 	public void delete(int id) {
+		  Products product = productsRepo.findById(id).orElseThrow(NoResultException::new);
+		    Categories category = product.getCategories();
+
+		    // Xóa liên kết giữa sản phẩm và danh mục
+		    category.getProducts().remove(product);
+		    categoriesRepo.save(category);
+
+		    // Xóa tất cả các bản ghi liên quan trong bảng OrderItems
+
+		    // Xóa sản phẩm
+		    productsRepo.deleteById(id);
 		productsRepo.deleteById(id);
 	}
 

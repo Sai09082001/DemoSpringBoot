@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,8 +46,14 @@ public class UserController {
 	//	return ResponseEntity.ok().header("id", "1").body(departmentDTO);
 	}
 
+	@GetMapping("/{id}") // 10
+	public ResponseDTO<UserDTO> get(@PathVariable("id") int id) {
+		UserDTO userDTO = userService.getById(id);
+		return ResponseDTO.<UserDTO>builder().status(200).data(userDTO).build();
+	}
+	
 	@PostMapping("/avatar")
-	public ResponseDTO<Void> avatar(@ModelAttribute @Valid UserDTO userDTO) throws IllegalStateException,IOException {
+	public ResponseDTO<Void> avatar(@ModelAttribute UserDTO userDTO) throws IllegalStateException,IOException {
 		// update avatar
 		if(!userDTO.getFile().isEmpty()) {
 			//ten file upload
@@ -106,11 +114,9 @@ public class UserController {
 	}
 	
 	@PostMapping("/edit")
-	public String edit(@ModelAttribute("user") @Valid UserDTO userDTO, BindingResult bindingResult) throws Exception {
-		if(bindingResult.hasErrors()) {
-			return "edit-user.html";
-		}
-		if(!userDTO.getFile().isEmpty()) {
+	public ResponseDTO<Void> edit(@ModelAttribute("user") @Valid UserDTO userDTO) throws Exception {
+	
+		if(userDTO.getFile() != null && !userDTO.getFile().isEmpty()) {
 			//ten file upload
 			String filename = userDTO.getFile().getOriginalFilename();
 			
@@ -122,6 +128,6 @@ public class UserController {
 			userDTO.setAvatarUrl(filename);
 		}
 		userService.update(userDTO);
-		return "redirect:/user/list";
+		return ResponseDTO.<Void>builder().status(200).msg("ok").build();
 	}
 }

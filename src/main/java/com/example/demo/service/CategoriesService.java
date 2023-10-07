@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.CategoriesDTO;
+import com.example.demo.dto.ProductsDTO;
 import com.example.demo.entity.Categories;
+import com.example.demo.entity.Products;
 import com.example.demo.repository.CategoriesRepo;
+import com.example.demo.repository.ProductsRepo;
 
 public interface CategoriesService {
 
@@ -23,6 +27,8 @@ public interface CategoriesService {
 	List<CategoriesDTO> getAll();
 
 	void delete(int id);
+	
+	void deleteProduct(int idC, int idP);
 
 	CategoriesDTO getById(int id);
 
@@ -33,8 +39,10 @@ class CategoriesServiceImpl implements CategoriesService {
 
 	@Autowired
 	private CategoriesRepo categoriesRepo;
-
-
+	
+	@Autowired
+	private ProductsRepo productsRepo;
+	
 	@Override
 	@Transactional
 	public void create(CategoriesDTO categoriesDTO) {
@@ -47,6 +55,19 @@ class CategoriesServiceImpl implements CategoriesService {
 		// check
 		Categories categories = categoriesRepo.findById(categoriesDTO.getId()).orElseThrow(NoResultException::new);
 		
+		for (ProductsDTO productDTO : categoriesDTO.getProducts()) {
+	        // Kiểm tra và lấy sản phẩm hiện có từ ID
+	        Products product = productsRepo.findById(productDTO.getId()).orElseThrow(NoResultException::new);
+
+	        // Cập nhật thông tin của sản phẩm
+	        product.setName(productDTO.getName());
+	        product.setDescription(productDTO.getDescription());
+	        // Cập nhật các thuộc tính khác của sản phẩm
+
+	        product.setCategories(categories);
+	        categories.getProducts().add(product);
+	    }
+
 		categories.setName(categoriesDTO.getName());
 			// save entity
 		categoriesRepo.save(categories);
@@ -56,7 +77,8 @@ class CategoriesServiceImpl implements CategoriesService {
 	
 	@Override
 	public void delete(int id) {
-		categoriesRepo.deleteById(id);
+		    // Xóa danh mục
+		  categoriesRepo.deleteById(id);
 	}
 
 	@Override
@@ -86,6 +108,17 @@ class CategoriesServiceImpl implements CategoriesService {
 //		return userDTOs;
 		// java 8
 		return categoriesList.stream().map(u -> convert(u)).collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional
+	public void deleteProduct(int idC, int idP) {
+		 Categories category = categoriesRepo.findById(idC).orElseThrow(NoResultException::new);
+
+		    Products product = productsRepo.findById(idP).orElseThrow(NoResultException::new);
+		    category.removeProduct(product);
+		    categoriesRepo.save(category);
+		
 	}
 
 }

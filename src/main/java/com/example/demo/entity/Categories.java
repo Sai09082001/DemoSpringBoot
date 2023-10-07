@@ -33,6 +33,12 @@ public class Categories {
 	@JoinColumn(name = "shop_id")
 	private Shop shop;
 	
-	@OneToMany(mappedBy = "categories" , fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "categories" , fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Products> products;
+	public void removeProduct(Products product) {
+	    if (products != null) {
+	        products.remove(product);
+	        product.setCategories(null);
+	    }
+	}
 }
